@@ -1,0 +1,43 @@
+{
+  "name": "data-viz-project",
+  "private": true,
+  "version": "0.0.0",
+  "type": "module",
+  "scripts": {
+    "dev": "vite",
+    "build": "tsc -b && vite build",
+    "lint": "eslint .",
+    "preview": "vite preview"
+  },
+  "dependencies": {
+    "@deck.gl/core": "^9.0.40",
+    "@deck.gl/layers": "^9.0.40",
+    "@deck.gl/react": "^9.0.40",
+    "@loaders.gl/core": "^4.3.3",
+    "@loaders.gl/csv": "^4.3.3",
+    "@vis.gl/react-maplibre": "1.0.0-alpha.4",
+    "deck.gl": "^9.0.40",
+    "maplibre-gl": "^5.0.1",
+    "papaparse": "^5.5.1",
+    "react": "^18.3.1",
+    "react-dom": "^18.3.1",
+    "victory": "^37.3.6"
+  },
+  "devDependencies": {
+    "@eslint/js": "^9.17.0",
+    "@types/papaparse": "^5.3.15",
+    "@types/react": "^18.3.18",
+    "@types/react-dom": "^18.3.5",
+    "@vitejs/plugin-react-swc": "^3.5.0",
+    "autoprefixer": "^10.4.20",
+    "eslint": "^9.17.0",
+    "eslint-plugin-react-hooks": "^5.0.0",
+    "eslint-plugin-react-refresh": "^0.4.16",
+    "globals": "^15.14.0",
+    "postcss": "^8.5.1",
+    "tailwindcss": "^3.4.17",
+    "typescript": "~5.6.2",
+    "typescript-eslint": "^8.18.2",
+    "vite": "^6.0.5"
+  }
+}
