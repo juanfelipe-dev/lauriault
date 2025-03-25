@@ -46,6 +46,7 @@ const Select = ({ data }: SelectProps) => {
       {info && (
         <div className="m-2 text-black text-md font-semibold font-serif flex justify-between p-4">
           <p>{info}</p>
+
           <div>
             <div className={`min-w-72 h-4 rounded-md ${legend}`} />
             <div className="flex justify-between m-1">

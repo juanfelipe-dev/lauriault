@@ -12,12 +12,13 @@ import Select from "./components/select";
 
 const App = () => {
   // Choose an H3 resolution (lower numbers give larger cells)
-  const resolution: number = 8;
-  const popu_norm = 5;
+  const resolution = 8;
+  const popuNorm = 5;
+  const topK = 20;
 
-  const attPopu_scaling = 5;
-  const attOC_scaling = 50;
-  const popuOC_scaling = 2;
+  const [attPopuScaling, setAttPopuScaling] = useState<number>(2);
+  const [attOCScaling, setAttOCScaling] = useState<number>(50);
+  const [popuOCScaling, setPopuOCScaling] = useState<number>(2);
 
   const [viewState] = useState<MapState>({
     latitude: 45.424721,
@@ -53,7 +54,7 @@ const App = () => {
       }
 
       if (d.Area) {
-        bins[h3Index].count += d.message / popu_norm;
+        bins[h3Index].count += d.message / popuNorm;
       } else {
         bins[h3Index].count++;
       }
@@ -82,7 +83,7 @@ const App = () => {
   // Tooltip callback remains unchanged
   const getTooltip = useCallback(({ object }: PickingInfo) => {
     if (!object) return;
-    console.log(object);
+    // console.log(object);
     return object && object.message;
   }, []);
 
@@ -105,6 +106,11 @@ const App = () => {
 
   const [popuOCData, setPopuOCData] = useState<any[]>([]);
 
+  // Top K
+  const [topAttPopu, setTopAttPopu] = useState<any[]>([]);
+  const [topAttOC, setTopAttOC] = useState<any[]>([]);
+  const [topPopuOC, setTopPopuOC] = useState<any[]>([]);
+
   // Throttle updates to state so we don't update for every single data point
   useEffect(() => {
     const interval = setInterval(() => {
@@ -117,7 +123,7 @@ const App = () => {
       if (popuDataRef.current.length > 0) {
         setPopuDataPoints([...popuDataRef.current]);
       }
-    }, 100);
+    }, 2000);
     return () => clearInterval(interval);
   }, []);
 
@@ -195,7 +201,7 @@ const App = () => {
         const center = h3ToGeo(key);
         return {
           h3Index: [key],
-          diff: attPopuBins[key].diff * attPopu_scaling,
+          diff: attPopuBins[key].diff * attPopuScaling,
           coordinates: [center[1], center[0]],
         };
       });
@@ -204,7 +210,7 @@ const App = () => {
         const center = h3ToGeo(key);
         return {
           h3Index: [key],
-          diff: attOCBins[key].diff * attOC_scaling,
+          diff: attOCBins[key].diff * attOCScaling,
           coordinates: [center[1], center[0]],
         };
       });
@@ -213,16 +219,40 @@ const App = () => {
         const center = h3ToGeo(key);
         return {
           h3Index: [key],
-          diff: popuOCBins[key].diff * popuOC_scaling,
+          diff: popuOCBins[key].diff * popuOCScaling,
           coordinates: [center[1], center[0]],
         };
       });
+
+      // Get top 10 hexagons values clone the array
+      const topAttPopu = attPopuDiff.sort(
+        (a, b) => Math.abs(a.diff) - Math.abs(b.diff)
+      );
+      const topAttOC = attOCDiff.sort(
+        (a, b) => Math.abs(a.diff) - Math.abs(b.diff)
+      );
+      const topPopuOC = popuOCDiff.sort(
+        (a, b) => Math.abs(a.diff) - Math.abs(b.diff)
+      );
+
+      // Print top K hexagons
+      setTopAttPopu(topAttPopu.slice(0, topK));
+      setTopAttOC(topAttOC.slice(0, topK));
+      setTopPopuOC(topPopuOC.slice(0, topK));
 
       setAttOCData(attOCDiff);
       setPopuOCData(popuOCDiff);
       setAttPopuData(attPopuDiff);
     }
-  }, [popuDataPoints, attDataPoints, OCdataPoints, resolution]);
+  }, [
+    popuDataPoints,
+    attDataPoints,
+    OCdataPoints,
+    resolution,
+    attOCScaling,
+    attPopuScaling,
+    popuOCScaling,
+  ]);
 
   // Create a single HeatmapLayer using the aggregated dataPoints.
   const ocHeatmapLayer = new HeatmapLayer({
@@ -340,6 +370,48 @@ const App = () => {
     elevationScale: 0,
   });
 
+  const topKPopuOC = new ScatterplotLayer({
+    id: "topKPopuOC",
+    data: topPopuOC,
+    filled: true,
+
+    stroked: true,
+    getPosition: (d) => d.coordinates,
+    getRadius: 10,
+    getFillColor: [255, 255, 255],
+    getLineColor: [0, 0, 0],
+    getLineWidth: 10,
+    radiusScale: 6,
+  });
+
+  const topKAttOC = new ScatterplotLayer({
+    id: "topKAttOC",
+    data: topAttOC,
+    filled: true,
+
+    stroked: true,
+    getPosition: (d) => d.coordinates,
+    getRadius: 10,
+    getFillColor: [255, 255, 255],
+    getLineColor: [0, 0, 0],
+    getLineWidth: 10,
+    radiusScale: 6,
+  });
+
+  const topKAttPopu = new ScatterplotLayer({
+    id: "topKAttPopu",
+    data: topAttPopu,
+    filled: true,
+
+    stroked: true,
+    getPosition: (d) => d.coordinates,
+    getRadius: 10,
+    getFillColor: [255, 255, 255],
+    getLineColor: [0, 0, 0],
+    getLineWidth: 10,
+    radiusScale: 6,
+  });
+
   const data = [
     {
       name: "Default",
@@ -381,7 +453,7 @@ const App = () => {
       name: "Entertainment Population Difference Map",
       desc: "Clustered using H3 indexing to show the difference in density between Local Entertainment and Ottawa Population Habitation Density",
       onClick: () => {
-        setCurrentLayer([attPopuLayer]);
+        setCurrentLayer([attPopuLayer, topKAttPopu]);
       },
       legend: "bg-gradient-to-r from-yellow-200 to-red-800",
       label: ["Low Interest", "High Interest"],
@@ -390,7 +462,7 @@ const App = () => {
       name: "Entertainment Transport Difference Map",
       desc: "Clustered using H3 indexing to show the difference in density between Local Entertainment and OC Transpo (Public Transportation)",
       onClick: () => {
-        setCurrentLayer([attOCLayer]);
+        setCurrentLayer([attOCLayer, topKAttOC]);
       },
       legend: "bg-gradient-to-r from-yellow-200 to-red-800",
       label: ["Low Interest", "High Interest"],
@@ -399,7 +471,7 @@ const App = () => {
       name: "Population Transport Difference Map",
       desc: "Clustered using H3 indexing to show the difference in density between Ottawa Population Habitation Density and OC Transpo (Public Transportation)",
       onClick: () => {
-        setCurrentLayer([popuOCLayer]);
+        setCurrentLayer([popuOCLayer, topKPopuOC]);
       },
       legend: "bg-gradient-to-r from-yellow-200 to-red-800",
       label: ["Low Interest", "High Interest"],
@@ -413,7 +485,7 @@ const App = () => {
           <Select data={data} />
         </div>
         <DeckGL
-          layers={currentLayer}
+          layers={[currentLayer]}
           initialViewState={viewState}
           controller={true}
           getTooltip={getTooltip}
