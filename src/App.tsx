@@ -68,7 +68,13 @@ const App = () => {
     keys.forEach((key) => {
       const countA = binA[key] ? binA[key].count : 0;
       const countB = binB[key] ? binB[key].count : 0;
-      diffBins[key] = { diff: countA - countB, h3Index: key };
+
+      // Difference Metrics
+      // const diff = Math.abs(countA - countB);
+      const diff = countA - countB;
+      // const diff = (Math.abs(countA - countB) / ((countA + countB) / 2)) * 100;
+
+      diffBins[key] = { diff: diff, h3Index: key };
     });
     return diffBins;
   }
@@ -343,43 +349,43 @@ const App = () => {
       },
     },
     {
-      name: "OC Transpo Heatmap",
-      desc: "2.1 million datapoints Indicating the Density of OC Transpo Busses over a week",
+      name: "Transportation Heatmap",
+      desc: "2.1 million datapoints indicating the Density of OC Transpo Busses over a week",
       onClick: () => {
         setCurrentLayer([ocHeatmapLayer]);
       },
     },
     {
-      name: "Att Heatmap",
-      desc: "Entertainment Heatmap",
+      name: "Entertainment Heatmap",
+      desc: "Density Heatmap of Local Entertainment Venues in Ottawa (Plotted using Google Maps Places API & Google My Maps)",
       onClick: () => {
         setCurrentLayer([attHeatmapLayer]);
       },
     },
     {
-      name: "Popu Heatmap",
-      desc: "Population Heatmap",
+      name: "Population Heatmap",
+      desc: "Density Heatmap of Population in Ottawa by Dissemination Area (Plotted using 2021 Census Data)",
       onClick: () => {
         setCurrentLayer([popuHeatmapLayer]);
       },
     },
     {
-      name: "Att Popu",
-      desc: "Entertainment - Population",
+      name: "Entertainment Population Difference Map",
+      desc: "Clustered using H3 indexing to show the difference in density between Local Entertainment and Ottawa Population Habitation Density",
       onClick: () => {
         setCurrentLayer([attPopuLayer]);
       },
     },
     {
-      name: "Att OC",
-      desc: "Entertainment - OC Transpo",
+      name: "Entertainment Transport Difference Map",
+      desc: "Clustered using H3 indexing to show the difference in density between Local Entertainment and OC Transpo (Public Transportation)",
       onClick: () => {
         setCurrentLayer([attOCLayer]);
       },
     },
     {
-      name: "Popu OC",
-      desc: "Population - OC Transpo",
+      name: "Population Transport Difference Map",
+      desc: "Clustered using H3 indexing to show the difference in density between Ottawa Population Habitation Density and OC Transpo (Public Transportation)",
       onClick: () => {
         setCurrentLayer([popuOCLayer]);
       },
@@ -388,19 +394,26 @@ const App = () => {
 
   return (
     <>
-      <div className="fixed w-screen z-50">
-        <Select data={data} />
+      <div className="hidden lg:block">
+        <div className="fixed w-screen z-50">
+          <Select data={data} />
+        </div>
+        <DeckGL
+          layers={currentLayer}
+          initialViewState={viewState}
+          controller={true}
+          getTooltip={getTooltip}
+        >
+          <Map
+            mapStyle={`https://api.maptiler.com/maps/dataviz/style.json?key=${process.env.MAPTILER_API}`}
+          />
+        </DeckGL>
       </div>
-      <DeckGL
-        layers={currentLayer}
-        initialViewState={viewState}
-        controller={true}
-        getTooltip={getTooltip}
-      >
-        <Map
-          mapStyle={`https://api.maptiler.com/maps/dataviz/style.json?key=${process.env.MAPTILER_API}`}
-        />
-      </DeckGL>
+      <div className="lg:hidden flex justify-center items-center h-screen bg-black p-2">
+        <h1 className="text-2xl text-center font-serif text-white">
+          Please view this on a larger screen
+        </h1>
+      </div>
     </>
   );
 };

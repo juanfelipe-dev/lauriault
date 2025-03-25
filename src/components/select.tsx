@@ -19,7 +19,7 @@ const Select = ({ data }: SelectProps) => {
               htmlFor={item.name}
               className="block cursor-pointer rounded-lg border border-gray-100 bg-white p-4 text-sm font-medium shadow-xs hover:border-gray-200 hover:opacity-100 opacity-50"
             >
-              <div>
+              <div className="min-h-12 flex items-center">
                 <p className="text-gray-700">{item.name}</p>
               </div>
 
@@ -37,7 +37,9 @@ const Select = ({ data }: SelectProps) => {
           </div>
         ))}
       </fieldset>
-      <div className="m-2 text-black text-md font-serif">{info}</div>
+      <div className="m-2 text-black text-md font-semibold font-serif flex justify-center  p-4">
+        {info}
+      </div>
     </>
   );
 };
