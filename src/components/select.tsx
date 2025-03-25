@@ -5,11 +5,15 @@ type SelectProps = {
     name: string;
     onClick: () => void;
     desc: string;
+    legend: string;
+    label: string[];
   }[];
 };
 
 const Select = ({ data }: SelectProps) => {
   const [info, setInfo] = React.useState("");
+  const [legend, setLegend] = React.useState("");
+  const [label, setLabel] = React.useState(["", ""]);
   return (
     <>
       <fieldset className="grid grid-cols-7 gap-4 m-2">
@@ -31,15 +35,25 @@ const Select = ({ data }: SelectProps) => {
                 onClick={() => {
                   item.onClick();
                   setInfo(item.desc);
+                  setLegend(item.legend);
+                  setLabel(item.label);
                 }}
               />
             </label>
           </div>
         ))}
       </fieldset>
-      <div className="m-2 text-black text-md font-semibold font-serif flex justify-center  p-4">
-        {info}
-      </div>
+      {info && (
+        <div className="m-2 text-black text-md font-semibold font-serif flex justify-between p-4">
+          <p>{info}</p>
+          <div>
+            <div className={`min-w-72 h-4 rounded-md ${legend}`} />
+            <div className="flex justify-between m-1">
+              <p>{label[0]}</p> <p>{label[1]}</p>
+            </div>
+          </div>
+        </div>
+      )}
     </>
   );
 };

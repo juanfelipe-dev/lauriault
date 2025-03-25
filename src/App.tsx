@@ -347,6 +347,8 @@ const App = () => {
       onClick: () => {
         setCurrentLayer([]);
       },
+      legend: "",
+      label: ["", ""],
     },
     {
       name: "Transportation Heatmap",
@@ -354,13 +356,17 @@ const App = () => {
       onClick: () => {
         setCurrentLayer([ocHeatmapLayer]);
       },
+      legend: "bg-gradient-to-r from-amber-300 to-yellow-800",
+      label: ["Low Visits", "High Visits"],
     },
     {
       name: "Entertainment Heatmap",
-      desc: "Density Heatmap of Local Entertainment Venues in Ottawa (Plotted using Google Maps Places API & Google My Maps)",
+      desc: "Density Heatmap of Local Entertainment Locations in Ottawa (Plotted using Google Maps Places API & Google My Maps)",
       onClick: () => {
         setCurrentLayer([attHeatmapLayer]);
       },
+      legend: "bg-gradient-to-r from-green-300 to-green-900",
+      label: ["Less Venues", "Many Venues"],
     },
     {
       name: "Population Heatmap",
@@ -368,6 +374,8 @@ const App = () => {
       onClick: () => {
         setCurrentLayer([popuHeatmapLayer]);
       },
+      legend: "bg-gradient-to-r from-blue-300 to-blue-900",
+      label: ["Low Density", "High Density"],
     },
     {
       name: "Entertainment Population Difference Map",
@@ -375,6 +383,8 @@ const App = () => {
       onClick: () => {
         setCurrentLayer([attPopuLayer]);
       },
+      legend: "bg-gradient-to-r from-yellow-200 to-red-800",
+      label: ["Low Interest", "High Interest"],
     },
     {
       name: "Entertainment Transport Difference Map",
@@ -382,6 +392,8 @@ const App = () => {
       onClick: () => {
         setCurrentLayer([attOCLayer]);
       },
+      legend: "bg-gradient-to-r from-yellow-200 to-red-800",
+      label: ["Low Interest", "High Interest"],
     },
     {
       name: "Population Transport Difference Map",
@@ -389,6 +401,8 @@ const App = () => {
       onClick: () => {
         setCurrentLayer([popuOCLayer]);
       },
+      legend: "bg-gradient-to-r from-yellow-200 to-red-800",
+      label: ["Low Interest", "High Interest"],
     },
   ];
 
