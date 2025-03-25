@@ -11,14 +11,46 @@ import { loadCSV } from "./lib/loaders";
 import Select from "./components/select";
 
 const App = () => {
-  // Choose an H3 resolution (lower numbers give larger cells)
-  const resolution = 8;
-  const popuNorm = 5;
-  const topK = 20;
+  const [queryParams, setQueryParams] = useState(
+    new URLSearchParams(window.location.search)
+  );
 
-  const [attPopuScaling, setAttPopuScaling] = useState<number>(2);
-  const [attOCScaling, setAttOCScaling] = useState<number>(50);
-  const [popuOCScaling, setPopuOCScaling] = useState<number>(2);
+  useEffect(() => {
+    const handleUrlChange = () => {
+      setQueryParams(new URLSearchParams(window.location.search));
+    };
+
+    window.addEventListener("popstate", handleUrlChange);
+
+    return () => {
+      window.removeEventListener("popstate", handleUrlChange);
+    };
+  }, []);
+
+  // Choose an H3 resolution (lower numbers give larger cells)
+  const resolution = queryParams.get("resolution")
+    ? parseInt(queryParams.get("resolution") || "8")
+    : 8;
+
+  const popuNorm = queryParams.get("popuNorm")
+    ? parseInt(queryParams.get("popuNorm") || "5")
+    : 5;
+
+  const topK = queryParams.get("topK")
+    ? parseInt(queryParams.get("topK") || "10")
+    : 10;
+
+  const attPopuScaling = queryParams.get("attPopuScaling")
+    ? parseInt(queryParams.get("attPopuScaling") || "2")
+    : 2;
+
+  const attOCScaling = queryParams.get("attOCScaling")
+    ? parseInt(queryParams.get("attOCScaling") || "50")
+    : 50;
+
+  const popuOCScaling = queryParams.get("popuOCScaling")
+    ? parseInt(queryParams.get("popuOCScaling") || "2")
+    : 2;
 
   const [viewState] = useState<MapState>({
     latitude: 45.424721,
