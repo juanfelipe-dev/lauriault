@@ -5,3 +5,7 @@
 .maplibregl-compact {
   display: none;
 }
+
+html {
+  overflow: hidden;
+}
