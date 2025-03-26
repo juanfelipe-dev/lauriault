@@ -456,7 +456,7 @@ const App = () => {
     },
     {
       name: "Transportation Heatmap",
-      desc: "2.1 million datapoints indicating the Density of OC Transpo Busses over a week",
+      desc: "2.1 million datapoints indicating the Density of OC Transpo Buses over a week",
       onClick: () => {
         setCurrentLayer([ocHeatmapLayer]);
       },
