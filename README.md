@@ -95,7 +95,7 @@ If you see an issue or would like to contribute, please do & open a pull request
   
 ## License
 
-This project is licensed under the MIT License - see the [LICENSE.md](LICENSE.md) file for details
+This project is licensed under the GNU GPLv3 License - see the [LICENSE.md](LICENSE.md) file for details
 
 ## Miscellaneous
 
