@@ -42,7 +42,7 @@ apt-get install nodejs
 A step by step series of examples that tell you how to get a development env running
 
 ```
-git clone https://github.com/JustinZhang17/lauriault.git  
+git clone https://github.com/juanfelipe-dev/lauriault.git  
 cd lauriault  
 npm install
 ```
@@ -87,11 +87,6 @@ Example URL: http://localhost:5173?resolution=7&topK=15
 ## Contributing
 
 If you see an issue or would like to contribute, please do & open a pull request or ticket for/with new features or fixes
-
-## Authors
-
-- **Justin Zhang** - _Initial work_ - [JustinZhang17](https://github.com/JustinZhang17)
-- **Hanna Khan** - _Initial work_ - [HannaKhan](https://www.linkedin.com/in/hanna-khan-09925a362/)
   
 ## License
 
@@ -108,7 +103,3 @@ The application processes three main CSV datasets:
 - `local_entertainment.csv` - Entertainment venue locations from Google Maps Places API
 
 The application requires large screens for optimal viewing and displays a fallback message on mobile devices.
-
-### [What's the meaning behind the name](https://blog.justinjzhang.com/behind-the-names/)
-
-### [Who is Tracey Lauriault?](https://carleton.ca/sjc/profile/lauriault-tracey/)
